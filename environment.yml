@@ -1,0 +1,17 @@
+name: auto-robot
+channels:
+  - aihabitat
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - habitat-sim
+  - pip
+  - pip:
+    - open3d==0.18.0
+    - scipy
+    - numpy
+    - sentence-transformers
+    - networkx
+    - matplotlib
+    - requests
