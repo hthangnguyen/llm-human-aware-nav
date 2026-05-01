@@ -1,19 +1,24 @@
 # Human-Aware Robot Path Planning via Local LLM Trajectory Prediction
 
-## Abstract
-This project implements a simulation-only pipeline for human-aware robot path planning in indoor environments. Starting from a semantic scene graph, the system uses a local LLM (`llama3.2:3b`) to predict human movement via a Continuous-Time Markov Chain (inspired by LP2), then plans a cost-weighted path that trades off travel distance against proximity to predicted human locations. We evaluate the system on 3 Replica scenes (`room_0`, `room_1`, `office_0`) and show that human-aware planning achieves up to ~12% improvement in human-proximity safety at a cost of only ~8% longer paths.
+## Research Hypothesis
+**Can dynamic, LLM-generated heuristics prevent "frozen robot" problems in cost-aware navigation without incurring massive path overhead?**
 
-## System Architecture
+Cost-aware path planners (like A*) often struggle in narrow indoor environments: if they are penalized for passing near human interaction zones, they may calculate that navigating a room is too "expensive" and freeze, or take absurd physical detours to avoid a minor risk. 
 
-1. **Scene Graph Builder (DAAAM Approximation):** Parses Habitat's `info_semantic.json` and uses an LLM to generate descriptive embeddings.
-2. **Trajectory Prediction (LP2 Approximation):** Predicts human interaction sequences using a local LLM and propagates spatial probability over the scene graph via a state-dependent Continuous-Time Markov Chain (CTMC).
-3. **Map Compression (Clio Approximation):** Filters non-task-relevant objects out of the environment map to reduce noise.
-4. **Cost-Aware Path Planner:** Constructs a dense navigable grid from the `habitat-sim` NavMesh, evaluates the human proximity cost field, and calculates a detour path via A* that minimizes a combined distance-and-human-proximity cost metric.
-5. **Visualization & Evaluation:** Automatically charts paths in 2D and performs quantitative evaluations (Path Length Ratio, Safety Improvement).
+This project is a simulation-based prototype that tests whether we can solve this by generating **scene-specific, dynamic heuristics** using a local Large Language Model (`llama3.2:3b`). Instead of relying on static rules, the system queries the LLM at runtime to predict human behavior based on the specific semantic objects in the room, propagates that probability over a Continuous-Time Markov Chain, and applies a **quadratic penalty** to force the A* planner to actively avoid peak danger spikes.
+
+## Methodology
+
+To test this hypothesis under realistic engineering constraints, I built an end-to-end evaluation pipeline bridging perception, language, and planning:
+
+1. **Semantic Scene Graph:** Parses Habitat's `info_semantic.json` to ground the LLM in the specific objects of the current room (inspired by DAAAM).
+2. **Dynamic Trajectory Prediction:** Queries the LLM to generate a custom compatibility matrix of likely human interactions, then propagates spatial probability over the scene graph via a Continuous-Time Markov Chain (inspired by LP2).
+3. **Map Compression:** Filters non-task-relevant objects out of the environment to reduce ambient probability noise (inspired by Clio).
+4. **Quadratic Cost-Aware Planner:** Evaluates the human proximity cost field on a dense NavMesh and calculates a detour path via A* that penalizes peak danger zones using a non-linear quadratic cost function.
 
 ## Visual Results
 
-**Left:** `room_0` showing a successful Cost-Aware detour (Blue) routing around the high-probability human zones.
+**Left:** `room_0` showing a successful Cost-Aware detour (Blue) routing around the high-probability human zones. 
 
 **Right:** `office_0` showing a topological bottleneck where the planner is forced to cross danger zones.
 
@@ -41,6 +46,9 @@ Across 3 indoor scenes, the custom Cost-Aware A* path successfully identified an
 Instead of relying on a static, hand-coded transition matrix, the pipeline queries the LLM at runtime to generate a **Dynamic Compatibility Matrix** tailored to the unique classes found in each room. This eliminated structural biases and boosted `room_0`'s Average Safety Improvement to a staggering **16.66%**.
 
 When the pipeline was run with the Clio map filter disabled (`_noclio`), we observed distinct shifts. In `room_0`, Clio successfully suppressed background noise, improving the average safety gain from 13.10% to 16.66% and unlocking an 8.64% peak improvement. However, in `room_1`, Clio's strict text-filtering inadvertently degraded performance compared to the unfiltered map, highlighting a critical area for future LLM-vision alignment research.
+
+### Trajectory Prediction Evaluation
+To isolate the performance of the LLM trajectory predictor (LP2), we evaluated the zero-shot predictions of `llama3.2:3b` against a set of ground-truth human interaction sequences. The LLM achieved a **Top-3 Recall of 16.7%** and a fallback rate of 14.3%. Qualitative analysis revealed that while the LLM successfully predicts generic semantic affordances (e.g., `switch` -> `lamp`), it struggles to zero-shot predict the specific temporal sequence of an embodied human trajectory (e.g., `switch` -> `sofa` -> `book`). This limitation strongly justifies our architectural choice to use the Continuous-Time Markov Chain (CTMC) downstream, which diffuses point-estimate uncertainty into a broader, more robust spatial probability field for the A* planner.
 
 ## How to Run
 
