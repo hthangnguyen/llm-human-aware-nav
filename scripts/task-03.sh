@@ -1,11 +1,11 @@
 # 1. Run Module 3 (Clio Filter)
-OUTPUT_DIR="/home/aidev1/research/fs-robot-v2/replica_experiments/20260430_140820"
-/home/aidev1/miniconda3/envs/auto-robot/bin/python scripts/m3_clio_filter.py \
+OUTPUT_DIR="replica_experiments/20260430_140820"
+python scripts/m3_clio_filter.py \
   --output-dir "$OUTPUT_DIR"
 
 # 2. Validation Check V3
 export OUTPUT_DIR
-/home/aidev1/miniconda3/envs/auto-robot/bin/python - <<'PYEOF'
+python - <<'PYEOF'
 import json, os
 
 sg_path = os.path.join(os.environ['OUTPUT_DIR'], 'scene_graph.json')

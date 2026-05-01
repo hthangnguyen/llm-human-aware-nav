@@ -18,14 +18,14 @@ if [[ "$2" == "--no-clio" ]]; then
     NO_CLIO_FLAG="--no-clio"
 fi
 
-export OUTPUT_DIR="/home/aidev1/research/fs-robot-v2/replica_experiments/${SCENE_NAME}_${TIMESTAMP}"
+export OUTPUT_DIR="replica_experiments/${SCENE_NAME}_${TIMESTAMP}"
 
 echo "[demo.sh] Starting pipeline for $SCENE_NAME"
 echo "[demo.sh] Output directory: $OUTPUT_DIR"
 
 mkdir -p "$OUTPUT_DIR"
 
-PYTHON="/home/aidev1/miniconda3/envs/auto-robot/bin/python"
+PYTHON="python"
 
 echo "[1/6] Building Scene Graph (Module 1)..."
 $PYTHON scripts/m1_build_scene_graph.py --scene-path "$SCENE_PATH" --output-dir "$OUTPUT_DIR" > "$OUTPUT_DIR/m1.log" 2>&1

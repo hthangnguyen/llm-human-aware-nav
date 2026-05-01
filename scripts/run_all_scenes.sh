@@ -3,7 +3,7 @@
 
 set -e
 
-REPLICA_ROOT="/home/aidev1/research/fs-robot-v2/datasets/replica"
+REPLICA_ROOT="datasets/replica"
 SCENES=("room_0" "room_1" "office_0")
 
 echo "======================================"
@@ -25,4 +25,4 @@ echo "======================================"
 echo "All scenes completed. Aggregating results..."
 echo "======================================"
 
-/home/aidev1/miniconda3/envs/auto-robot/bin/python scripts/aggregate_results.py
+python scripts/aggregate_results.py

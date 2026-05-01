@@ -1,11 +1,11 @@
-OUTPUT_DIR="/home/aidev1/research/fs-robot-v2/replica_experiments/20260430_140820"
+OUTPUT_DIR="replica_experiments/20260430_140820"
 # 2. Run Module 5 (Visualization)
-/home/aidev1/miniconda3/envs/auto-robot/bin/python scripts/m5_visualize.py \
+python scripts/m5_visualize.py \
   --output-dir "$OUTPUT_DIR"
 
 # 3. Validation Check V5
 export OUTPUT_DIR
-/home/aidev1/miniconda3/envs/auto-robot/bin/python - <<'PYEOF'
+python - <<'PYEOF'
 import os
 
 png_file = os.path.join(os.environ['OUTPUT_DIR'], 'topdown_paths.png')

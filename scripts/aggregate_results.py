@@ -9,7 +9,7 @@ import pathlib
 import sys
 
 def main():
-    exp_dir = pathlib.Path("/home/aidev1/research/fs-robot-v2/replica_experiments")
+    exp_dir = pathlib.Path("replica_experiments")
     if not exp_dir.exists():
         print("No experiments directory found.")
         sys.exit(1)

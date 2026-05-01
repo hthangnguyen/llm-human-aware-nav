@@ -1,13 +1,13 @@
 # 1. Run Module 4 (A* Path Planning)
-OUTPUT_DIR="/home/aidev1/research/fs-robot-v2/replica_experiments/20260430_140820"
-/home/aidev1/miniconda3/envs/auto-robot/bin/python scripts/m4_plan_path.py \
-  --scene-path /home/aidev1/research/fs-robot-v2/datasets/replica/room_0 \
+OUTPUT_DIR="replica_experiments/20260430_140820"
+python scripts/m4_plan_path.py \
+  --scene-path datasets/replica/room_0 \
   --output-dir "$OUTPUT_DIR" \
   --horizon 30.0
 
 # 2. Validation Check V4
 export OUTPUT_DIR
-/home/aidev1/miniconda3/envs/auto-robot/bin/python - <<'PYEOF'
+python - <<'PYEOF'
 import json, os
 
 path_file = os.path.join(os.environ['OUTPUT_DIR'], 'path.json')

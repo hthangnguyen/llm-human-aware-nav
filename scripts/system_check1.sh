@@ -1,8 +1,8 @@
 # 1. Inspect the 'objects' section of info_semantic.json
 echo "--- S0.5.1 info_semantic.json objects sample ---"
-/home/aidev1/miniconda3/envs/auto-robot/bin/python -c "
+python -c "
 import json
-with open('/home/aidev1/research/fs-robot-v2/datasets/replica/room_0/habitat/info_semantic.json') as f:
+with open('datasets/replica/room_0/habitat/info_semantic.json') as f:
     data = json.load(f)
     print(f'Keys: {data.keys()}')
     if 'objects' in data:

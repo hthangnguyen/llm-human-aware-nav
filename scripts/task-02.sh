@@ -1,16 +1,16 @@
 # 1. Ensure OUTPUT_DIR is set (it should be from the last step)
-OUTPUT_DIR="/home/aidev1/research/fs-robot-v2/replica_experiments/20260430_140820"
+OUTPUT_DIR="replica_experiments/20260430_140820"
 echo "Using OUTPUT_DIR: $OUTPUT_DIR"
 
 # 2. Run Module 2 (LP2 Predict with CTMC improvements)
-/home/aidev1/miniconda3/envs/auto-robot/bin/python scripts/m2_lp2_predict.py \
+python scripts/m2_lp2_predict.py \
   --output-dir "$OUTPUT_DIR" \
   --model llama3.2:3b \
   --compat-matrix data/compat_matrix.json
 
 # 3. Validation Check V2
 export OUTPUT_DIR
-/home/aidev1/miniconda3/envs/auto-robot/bin/python - <<'PYEOF'
+python - <<'PYEOF'
 import json, numpy as np, os
 
 traj_path = os.path.join(os.environ['OUTPUT_DIR'], 'trajectories.json')

@@ -1,12 +1,12 @@
 # 1. System checks
 echo "--- S0.1 System Checks ---"
 lsb_release -a 2>/dev/null | grep Description
-/home/aidev1/miniconda3/envs/auto-robot/bin/python --version
+python --version
 nvidia-smi --query-gpu=name,driver_version --format=csv,noheader
 
 # 2. Dataset Verification (checking room_0)
 echo -e "\n--- S0.2 Dataset Verification ---"
-SCENE_PATH="/home/aidev1/research/fs-robot-v2/datasets/replica/room_0"
+SCENE_PATH="datasets/replica/room_0"
 # Check if it's a symlink and where it points
 ls -ld "$SCENE_PATH"
 # Check for required files inside the resolved path
@@ -16,7 +16,7 @@ done
 
 # 3. Python Package Verification
 echo -e "\n--- S0.3 Python Dependencies ---"
-/home/aidev1/miniconda3/envs/auto-robot/bin/python -c "
+python -c "
 import open3d, sklearn, scipy, sentence_transformers, numpy, requests, habitat_sim
 print('open3d:', open3d.__version__)
 print('habitat-sim:', habitat_sim.__version__)
