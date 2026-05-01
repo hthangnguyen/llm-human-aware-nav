@@ -13,7 +13,9 @@ This project implements a simulation-only pipeline for human-aware robot path pl
 
 ## Visual Results
 
-**Left:** `room_0` showing a successful Cost-Aware detour (Blue) routing around the high-probability human zones. **Right:** `office_0` showing a topological bottleneck where the planner is forced to cross danger zones.
+**Left:** `room_0` showing a successful Cost-Aware detour (Blue) routing around the high-probability human zones.
+
+**Right:** `office_0` showing a topological bottleneck where the planner is forced to cross danger zones.
 
 <p align="center">
   <img src="assets/images/room_0_success.png" width="45%" />
